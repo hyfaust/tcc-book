@@ -84,30 +84,10 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    /* Output preprocessed tokens to a buffer */
+    /* Output preprocessed tokens */
     {
-        FILE *out;
-        char *outbuf = NULL;
-        int outsize = 0;
-
-        /* Use a temporary file for output */
-        out = tmpfile();
-        if (!out) {
-            fprintf(stderr, "Error: cannot create temp file\n");
-            tcc_delete(s);
-            free(buf);
-            return 1;
-        }
-
         tcc_set_output_type(s, TCC_OUTPUT_PREPROCESS);
-        tcc_output_file(s, out);
-
-        /* For a simpler demonstration, print what we can */
-        printf("=== Token Dump for '%s' ===\n\n", filename);
-        printf("%-6s  %-14s  %s\n", "TOKEN", "CATEGORY", "VALUE");
-        printf("%-6s  %-14s  %s\n", "------", "--------------", "-----");
-
-        fclose(out);
+        tcc_output_file(s, "/dev/stdout");
     }
 
     printf("\n--- Demonstrating tcc keyword token system ---\n\n");
