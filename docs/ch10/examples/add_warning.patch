@@ -1,0 +1,111 @@
+From: TinyCC Developer <developer@example.com>
+Subject: [PATCH] Add -Wshadow warning for variable shadowing
+
+This patch adds a new -Wshadow warning option that reports when
+a local variable declaration shadows a variable in an outer scope.
+
+Example:
+    int x = 10;
+    void foo(void) {
+        int x = 20;  // warning: declaration of 'x' shadows previous
+    }
+
+The implementation adds:
+1. A 'warn_shadow' field to TCCState
+2. Command-line parsing for -Wshadow / -Wno-shadow
+3. A check in the variable declaration path that searches for
+   same-named symbols in outer scopes
+
+Signed-off-by: TinyCC Developer <developer@example.com>
+---
+ tcc.h      |  1 +
+ libtcc.c   |  4 ++++
+ tccgen.c   | 28 ++++++++++++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+
+diff --git a/tcc.h b/tcc.h
+--- a/tcc.h
++++ b/tcc.h
+@@ -XXX,6 +XXX,7 @@
+     unsigned char warn_discarded_qualifiers;
++    unsigned char warn_shadow;  /* -Wshadow: warn about variable shadowing */
+     #define WARN_ON  1
+     unsigned char warn_num;
+
+diff --git a/libtcc.c b/libtcc.c
+--- a/libtcc.c
++++ b/libtcc.c
+@@ -XXX,6 +XXX,10 @@
+     } else if (strstart("-Wno-discarded-qualifiers", &p)) {
+         s->warn_discarded_qualifiers = 0;
++    } else if (strstart("-Wshadow", &p)) {
++        s->warn_shadow = 1;
++    } else if (strstart("-Wno-shadow", &p)) {
++        s->warn_shadow = 0;
+     } else if (strstart("-W", &p)) {
+
+diff --git a/tccgen.c b/tccgen.c
+--- a/tccgen.c
++++ b/tccgen.c
+@@ -XXX,6 +XXX,34 @@
++/*
++ * Check if a new local variable declaration shadows a symbol
++ * from an outer scope. Called during local variable declaration.
++ */
++static void check_shadow_declaration(int v)
++{
++    TCCState *s1 = tcc_state;
++    Sym *sym;
++
++    if (!s1->warn_shadow)
++        return;
++
++    /* Search for the same name in outer scopes */
++    sym = sym_find(v);
++    while (sym) {
++        /* Skip if same scope level */
++        if (sym->sym_scope >= local_scope) {
++            sym = sym->prev_tok;
++            continue;
++        }
++        /* Skip typedefs and enum constants - they live in different spaces */
++        if ((sym->type.t & VT_BTYPE) == VT_ENUM_VAL ||
++            (sym->type.t & VT_TYPEDEF)) {
++            sym = sym->prev_tok;
++            continue;
++        }
++        /* Skip asm symbols */
++        if (IS_ASM_SYM(sym)) {
++            sym = sym->prev_tok;
++            continue;
++        }
++        /* Found a shadowed declaration */
++        tcc_warning("declaration of '%s' shadows a previous declaration",
++                    get_tok_str(v, NULL));
++        break;
++    }
++}
++
+ /* ... existing declaration handling code ... */
+ /* At the point where a new local variable is pushed: */
++    check_shadow_declaration(v);
+
+---
+2.XX.X
+
+Notes for applying this patch:
+
+1. The line numbers (@@ -XXX) are placeholders - adjust based on
+   your version of TCC source code.
+
+2. The exact location where check_shadow_declaration() should be
+   called depends on the structure of decl() in your version.
+   Look for where push_local_sym() or similar is called for
+   new variable declarations.
+
+3. Test with:
+   int x;
+   void f(void) { int x; }    // should warn
+   void g(void) { typedef int x; }  // should NOT warn
+   enum { y };
+   void h(void) { int y; }    // should warn

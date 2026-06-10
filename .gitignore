@@ -1,0 +1,35 @@
+# Build output
+site/
+
+# Python virtual environment
+.venv/
+
+# MkDocs cache
+.cache/
+
+# Redundant source dirs (content lives in docs/chXX/)
+ch01-intro/
+ch02-lexer/
+ch03-preprocessor/
+ch04-parser/
+ch05-codegen/
+ch06-linker/
+ch07-runtime/
+ch08-platforms/
+ch09-debug/
+ch10-practice/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Byte-compiled
+__pycache__/
+*.pyc

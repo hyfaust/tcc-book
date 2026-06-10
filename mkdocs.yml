@@ -1,0 +1,151 @@
+site_name: 深入理解 TinyCC
+site_description: 从源码到实践的编译器教科书
+site_author: TinyCC Community
+repo_url: https://repo.or.cz/tinycc.git
+repo_name: tinycc
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: 切换到暗色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: 切换到亮色模式
+  font:
+    text: Noto Sans SC
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/git-alt
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+  - pymdownx.mark
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.critic
+  - pymdownx.keys
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
+  - md_in_html
+  - def_list
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - footnotes
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://repo.or.cz/tinycc.git
+  generator: false
+
+extra_css:
+  - stylesheets/custom.css
+
+nav:
+  - 首页: index.md
+  - 第一部分 — 基础篇:
+    - 第1章 编译器导论:
+      - 正文: ch01/index.md
+      - 练习:
+        - 练习1 构建tcc: ch01/exercises/ex1_build.md
+        - 练习2 跟踪编译: ch01/exercises/ex2_trace.md
+        - 练习3 修改tcc: ch01/exercises/ex3_modify.md
+    - 第2章 词法分析:
+      - 正文: ch02/index.md
+      - 练习:
+        - 练习1 Token识别: ch02/exercises/ex1_tokens.md
+        - 练习2 哈希计算: ch02/exercises/ex2_hash.md
+        - 练习3 添加关键字: ch02/exercises/ex3_modify.md
+    - 第3章 预处理器:
+      - 正文: ch03/index.md
+      - 练习:
+        - 练习1 宏展开: ch03/exercises/ex1_expand.md
+        - 练习2 Include路径: ch03/exercises/ex2_include.md
+        - 练习3 Pragma Pack: ch03/exercises/ex3_pragma.md
+  - 第二部分 — 核心篇:
+    - 第4章 语法分析与类型系统:
+      - 正文: ch04/index.md
+      - 练习:
+        - 练习1 类型编码: ch04/exercises/ex1_types.md
+        - 练习2 声明解析: ch04/exercises/ex2_parse.md
+        - 练习3 作用域追踪: ch04/exercises/ex3_scope.md
+    - 第5章 代码生成:
+      - 正文: ch05/index.md
+      - 练习:
+        - 练习1 虚拟栈: ch05/exercises/ex1_vstack.md
+        - 练习2 代码生成: ch05/exercises/ex2_codegen.md
+        - 练习3 寄存器分配: ch05/exercises/ex3_register.md
+    - 第6章 链接器与ELF:
+      - 正文: ch06/index.md
+      - 练习:
+        - 练习1 ELF分析: ch06/exercises/ex1_elf.md
+        - 练习2 重定位: ch06/exercises/ex2_reloc.md
+        - 练习3 JIT运行时: ch06/exercises/ex3_jit.md
+  - 第三部分 — 应用篇:
+    - 第7章 运行时与嵌入式API:
+      - 正文: ch07/index.md
+      - 练习:
+        - 练习1 libtcc使用: ch07/exercises/ex1_libtcc.md
+        - 练习2 嵌入式脚本: ch07/exercises/ex2_embed.md
+    - 第8章 跨平台与汇编器:
+      - 正文: ch08/index.md
+      - 练习:
+        - 练习1 交叉编译: ch08/exercises/ex1_cross.md
+        - 练习2 内联汇编: ch08/exercises/ex2_asm.md
+    - 第9章 调试与测试:
+      - 正文: ch09/index.md
+      - 练习:
+        - 练习1 调试信息: ch09/exercises/ex1_debug.md
+        - 练习2 测试编写: ch09/exercises/ex2_test.md
+    - 第10章 综合实践:
+      - 正文: ch10/index.md
+      - 练习:
+        - 练习1 项目扩展: ch10/exercises/ex1_project.md
+        - 练习2 社区参与: ch10/exercises/ex2_contribute.md
+  - 附录:
+    - 新手入门预备知识: appendix/prerequisites.md
