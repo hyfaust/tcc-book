@@ -1,8 +1,8 @@
 site_name: 深入理解 TinyCC
 site_description: 从源码到实践的编译器教科书
 site_author: TinyCC Community
-repo_url: https://repo.or.cz/tinycc.git
-repo_name: tinycc
+repo_url: https://github.com/hyfaust/tcc-book
+repo_name: hyfaust/tcc-book
 
 docs_dir: docs
 site_dir: site
